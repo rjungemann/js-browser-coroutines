@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="zepto.js"></script>
+    <script src="wrap-generator.js"></script>
+    <script src="regenerator.js"></script>
+    <script src="bluebird.js"></script>
+
+    <script type="text/regenerator">
+      function wait(ms) {
+        return new Promise(function(resolve, reject) {
+          setTimeout(resolve, ms);
+        });
+      }
+       
+      var work = Promise.coroutine(function* () {
+        yield wait(250);
+        console.log('a');
+       
+        yield wait(500);
+        console.log('b');
+       
+        yield wait(500);
+        console.log('c');
+      });
+       
+      var moreWork = Promise.coroutine(function* () {
+        console.log(1);
+       
+        yield wait(500);
+        console.log(2);
+       
+        yield wait(500);
+        console.log(3);
+      });
+       
+      work();
+      moreWork();
+    </script>
+
+    <script>
+      $('script[type="text/regenerator"]').each(function(i, el) {
+        var source = $(el).text();
+        var options = { supportBlockBinding: true };
+        var output = regenerator(source);
+
+        eval(output);
+      });
+    </script>
+  </head>
+
+  <body>
+  </body>
+</html>
